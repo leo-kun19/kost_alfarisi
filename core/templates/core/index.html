@@ -1,0 +1,82 @@
+<!-- Buat folder baru: "core/templates/core/" -->
+<!-- Lalu buat file ini di dalamnya: core/templates/core/index.html -->
+<!-- Tugas: Menampilkan data kamar secara dinamis. -->
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-g">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kost Alfarisi - Solusi Hunian Nyaman</title>
+    <!-- Memuat Tailwind CSS dari CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-6 max-w-7xl">
+        <!-- Header -->
+        <header class="text-center my-8 md:my-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Selamat Datang di Kost Alfarisi</h1>
+            <p class="text-lg text-gray-600 mt-3">Hunian nyaman, aman, dan strategis. (Total Kamar: {{ jumlah_kamar }})</p>
+        </header>
+
+        <!-- Daftar Kamar -->
+        <main>
+            <h2 class="text-3xl font-bold text-center mb-8">Pilihan Kamar Kami</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                
+                <!-- Looping/Perulangan data kamar dari Django -->
+                {% for kamar in daftar_kamar %}
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 flex flex-col">
+                    <div class="bg-gray-200 h-48 flex items-center justify-center">
+                        <p class="text-gray-400">[Foto Kamar {{ kamar.nomor_kamar }}]</p>
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start">
+                             <h3 class="text-xl font-bold text-gray-900">Kamar {{ kamar.nomor_kamar }}</h3>
+                            {% if kamar.status_ketersediaan == 'tersedia' %}
+                                <span class="text-xs font-semibold px-3 py-1 bg-green-100 text-green-800 rounded-full">Tersedia</span>
+                            {% else %}
+                                <span class="text-xs font-semibold px-3 py-1 bg-red-100 text-red-800 rounded-full">Terisi</span>
+                            {% endif %}
+                        </div>
+                        <p class="text-sm text-gray-500 mb-3">{{ kamar.lantai }}</p>
+                        
+                        <p class="text-2xl font-bold text-gray-900 my-2">
+                            Rp {{ kamar.harga_per_bulan|floatformat:"0" }}<span class="text-base font-normal text-gray-600">/bulan</span>
+                        </p>
+                        
+                        <div class="mt-auto pt-4">
+                             <a href="https://wa.me/6282383414819?text=Halo,%20saya%20tertarik%20dengan%20kamar%20nomor%20{{ kamar.nomor_kamar }}" 
+                                target="_blank"
+                                class="w-full block text-center font-semibold py-2 px-4 rounded-lg transition-colors duration-300
+                                {% if kamar.status_ketersediaan == 'tersedia' %}
+                                    bg-gray-800 text-white hover:bg-gray-700
+                                {% else %}
+                                    bg-gray-200 text-gray-500 cursor-not-allowed
+                                {% endif %}">
+                                {% if kamar.status_ketersediaan == 'tersedia' %} Hubungi via WhatsApp {% else %} Tidak Tersedia {% endif %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="col-span-full text-center text-gray-500">Belum ada data kamar yang ditambahkan.</p>
+                {% endfor %}
+                <!-- Akhir dari Looping -->
+                
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center mt-12 py-6 border-t">
+            <p class="text-gray-600">&copy; {% now "Y" %} Kost Alfarisi. Dibuat dengan Django.</p>
+        </footer>
+    </div>
+
+</body>
+</html>

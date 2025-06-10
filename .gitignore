@@ -1,0 +1,123 @@
+# ============================
+# Python
+# ============================
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Byte-compiled / optimized / DLL files
+*.so
+
+# ============================
+# Virtual environment
+# ============================
+venv/
+env/
+ENV/
+.venv/
+.ENV/
+
+# ============================
+# Editor / IDE
+# ============================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ============================
+# Environment variables
+# ============================
+.env
+.env.*
+
+# ============================
+# Database
+# ============================
+db.sqlite3
+*.sqlite3
+*.sqlite3-journal
+
+# ============================
+# Django-specific
+# ============================
+staticfiles/
+media/
+
+# ============================
+# Flask-specific
+# ============================
+instance/
+.webassets-cache
+
+# ============================
+# Logs and reports
+# ============================
+*.log
+*.out
+*.pid
+*.gz
+*.tgz
+*.zip
+
+# ============================
+# Unit test / coverage
+# ============================
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.pytest_cache/
+.junit.xml
+
+# ============================
+# Build / Distribution
+# ============================
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ============================
+# System files
+# ============================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ============================
+# Jupyter Notebook checkpoints
+# ============================
+.ipynb_checkpoints/
+
+# ============================
+# Profiling files
+# ============================
+*.prof
+*.pstats
+*.dat
+
+# ============================
+# Mac and Linux backup files
+# ============================
+*~
+*.bak
+*.swp
+*.swo
