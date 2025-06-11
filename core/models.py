@@ -11,7 +11,14 @@ class Kamar(models.Model):
         ('terisi', 'Terisi'),
         ('perbaikan', 'Dalam Perbaikan'),
     ]
-
+    
+    foto_kamar = models.ImageField(
+        upload_to='kamar_photos/', 
+        null=True, 
+        blank=True, 
+        help_text="Unggah foto utama kamar"
+    )
+    
     nomor_kamar = models.CharField(max_length=20, unique=True, help_text="Nomor atau kode unik kamar, misal: 'A01' atau 'B07'")
     lantai = models.CharField(max_length=20, help_text="Posisi lantai, misal: 'Lantai 1' atau 'Bawah'")
     deskripsi = models.TextField(blank=True, null=True)

@@ -32,9 +32,13 @@
                 <!-- Looping/Perulangan data kamar dari Django -->
                 {% for kamar in daftar_kamar %}
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 flex flex-col">
-                    <div class="bg-gray-200 h-48 flex items-center justify-center">
-                        <p class="text-gray-400">[Foto Kamar {{ kamar.nomor_kamar }}]</p>
-                    </div>
+                    <div class="bg-gray-200 h-48 flex items-center justify-center overflow-hidden">
+                        {% if kamar.foto_kamar %}
+                         <img src="{{ kamar.foto_kamar.url }}" alt="Foto Kamar {{ kamar.nomor_kamar }}" class="w-full h-full object-cover">
+                             {% else %}
+                    <p class="text-gray-400">[ Belum Ada Foto ]</p>
+                     {% endif %}
+                        </div>
                     <div class="p-5 flex flex-col flex-grow">
                         <div class="flex justify-between items-start">
                              <h3 class="text-xl font-bold text-gray-900">Kamar {{ kamar.nomor_kamar }}</h3>
@@ -51,16 +55,18 @@
                         </p>
                         
                         <div class="mt-auto pt-4">
-                             <a href="https://wa.me/6282383414819?text=Halo,%20saya%20tertarik%20dengan%20kamar%20nomor%20{{ kamar.nomor_kamar }}" 
-                                target="_blank"
-                                class="w-full block text-center font-semibold py-2 px-4 rounded-lg transition-colors duration-300
-                                {% if kamar.status_ketersediaan == 'tersedia' %}
-                                    bg-gray-800 text-white hover:bg-gray-700
-                                {% else %}
-                                    bg-gray-200 text-gray-500 cursor-not-allowed
-                                {% endif %}">
-                                {% if kamar.status_ketersediaan == 'tersedia' %} Hubungi via WhatsApp {% else %} Tidak Tersedia {% endif %}
-                            </a>
+                             {% if kamar.status_ketersediaan == 'tersedia' %}
+                                <a href="https://wa.me/6281234567890?text=Halo,%20saya%20tertarik%20dengan%20kamar%20nomor%20{{ kamar.nomor_kamar }}" 
+                                   target="_blank"
+                                   class="w-full block text-center font-semibold py-2 px-4 rounded-lg transition-colors duration-300 bg-gray-800 text-white hover:bg-gray-700">
+                                   Hubungi via WhatsApp
+                                </a>
+                            {% else %}
+                                <span class="w-full block text-center font-semibold py-2 px-4 rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed">
+                                    Tidak Tersedia
+                                </span>
+                            {% endif %}
+                            <!-- AKHIR PERUBAHAN LOGIKA -->
                         </div>
                     </div>
                 </div>
