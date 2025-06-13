@@ -1,88 +1,288 @@
-<!-- Buat folder baru: "core/templates/core/" -->
-<!-- Lalu buat file ini di dalamnya: core/templates/core/index.html -->
-<!-- Tugas: Menampilkan data kamar secara dinamis. -->
+<!-- File: core/templates/core/index.html -->
+<!-- Tugas: Memperbaiki logika tombol agar selalu tampil di setiap kartu kamar. -->
 
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-g">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kost Alfarisi - Solusi Hunian Nyaman</title>
-    <!-- Memuat Tailwind CSS dari CDN -->
+    <title>Kost Alfarisi - Hunian Nyaman, Tenang, dan Strategis</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Memuat Font Awesome untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        :root {
+            --primary-color: #0d9488; /* Teal-600 */
+            --primary-hover: #0f766e; /* Teal-700 */
+            --accent-color: #6366f1; /* Indigo-500 */
+            --neutral-bg: #f8fafc;   /* slate-50 */
+            --neutral-text: #334155; /* slate-700 */
+            --neutral-heading: #1e293b; /* slate-800 */
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            scroll-behavior: smooth;
+            background-color: var(--neutral-bg);
+            color: var(--neutral-text);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            color: var(--neutral-heading);
+        }
+        
+        /* Kelas .active untuk Javascript */
+        .nav-link.active {
+            color: var(--primary-color);
+            background-color: #f0fdfa; /* Teal-50 */
+        }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body>
 
-    <div class="container mx-auto p-6 max-w-7xl">
-        <!-- Header -->
-        <header class="text-center my-8 md:my-12">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Selamat Datang di Kost Alfarisi</h1>
-            <p class="text-lg text-gray-600 mt-3">Hunian nyaman, aman, dan strategis. (Total Kamar: {{ jumlah_kamar }})</p>
-        </header>
-
-        <!-- Daftar Kamar -->
-        <main>
-            <h2 class="text-3xl font-bold text-center mb-8">Pilihan Kamar Kami</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-lg shadow-md">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="flex items-center justify-between h-20">
+                <a href="#" class="flex items-center gap-3">
+                    <div class="bg-primary-color p-2 rounded-lg">
+                        <i class="fas fa-home text-white text-xl"></i>
+                    </div>
+                    <span class="text-xl font-bold text-neutral-800">Kost Alfarisi</span>
+                </a>
                 
-                <!-- Looping/Perulangan data kamar dari Django -->
-                {% for kamar in daftar_kamar %}
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 flex flex-col">
-                    <div class="bg-gray-200 h-48 flex items-center justify-center overflow-hidden">
-                        {% if kamar.foto_kamar %}
-                         <img src="{{ kamar.foto_kamar.url }}" alt="Foto Kamar {{ kamar.nomor_kamar }}" class="w-full h-full object-cover">
-                             {% else %}
-                    <p class="text-gray-400">[ Belum Ada Foto ]</p>
-                     {% endif %}
-                        </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start">
-                             <h3 class="text-xl font-bold text-gray-900">Kamar {{ kamar.nomor_kamar }}</h3>
-                            {% if kamar.status_ketersediaan == 'tersedia' %}
-                                <span class="text-xs font-semibold px-3 py-1 bg-green-100 text-green-800 rounded-full">Tersedia</span>
-                            {% else %}
-                                <span class="text-xs font-semibold px-3 py-1 bg-red-100 text-red-800 rounded-full">Terisi</span>
-                            {% endif %}
-                        </div>
-                        <p class="text-sm text-gray-500 mb-3">{{ kamar.lantai }}</p>
-                        
-                        <p class="text-2xl font-bold text-gray-900 my-2">
-                            Rp {{ kamar.harga_per_bulan|floatformat:"0" }}<span class="text-base font-normal text-gray-600">/bulan</span>
-                        </p>
-                        
-                        <div class="mt-auto pt-4">
-                             {% if kamar.status_ketersediaan == 'tersedia' %}
-                                <a href="https://wa.me/6281234567890?text=Halo,%20saya%20tertarik%20dengan%20kamar%20nomor%20{{ kamar.nomor_kamar }}" 
-                                   target="_blank"
-                                   class="w-full block text-center font-semibold py-2 px-4 rounded-lg transition-colors duration-300 bg-gray-800 text-white hover:bg-gray-700">
-                                   Hubungi via WhatsApp
-                                </a>
-                            {% else %}
-                                <span class="w-full block text-center font-semibold py-2 px-4 rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed">
-                                    Tidak Tersedia
-                                </span>
-                            {% endif %}
-                            <!-- AKHIR PERUBAHAN LOGIKA -->
-                        </div>
+                <!-- Desktop Navigation & CTA -->
+                <div class="hidden md:flex items-center gap-2">
+                    <div class="flex space-x-1">
+                        <a href="#keunggulan" class="nav-link px-3 py-2 text-neutral-600 hover:text-primary-color font-medium rounded-lg transition-colors duration-300 flex items-center gap-2">Keunggulan</a>
+                        <a href="#kamar" class="nav-link px-3 py-2 text-neutral-600 hover:text-primary-color font-medium rounded-lg transition-colors duration-300 flex items-center gap-2">Kamar</a>
+                        <a href="#fasilitas" class="nav-link px-3 py-2 text-neutral-600 hover:text-primary-color font-medium rounded-lg transition-colors duration-300 flex items-center gap-2">Fasilitas</a>
+                        <a href="#lokasi" class="nav-link px-3 py-2 text-neutral-600 hover:text-primary-color font-medium rounded-lg transition-colors duration-300 flex items-center gap-2">Lokasi</a>
+                        <a href="#faq" class="nav-link px-3 py-2 text-neutral-600 hover:text-primary-color font-medium rounded-lg transition-colors duration-300 flex items-center gap-2">FAQ</a>
                     </div>
                 </div>
-                {% empty %}
-                <p class="col-span-full text-center text-gray-500">Belum ada data kamar yang ditambahkan.</p>
-                {% endfor %}
-                <!-- Akhir dari Looping -->
-                
+
+                <button id="mobile-menu-button" class="md:hidden text-neutral-700">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
             </div>
-        </main>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 border-t border-neutral-200">
+            <div class="flex flex-col space-y-2 mt-4">
+                <a href="#keunggulan" class="nav-link px-3 py-2 text-neutral-600 hover:text-primary-color font-medium rounded-lg transition-colors duration-300 flex items-center gap-2">Keunggulan</a>
+                <a href="#kamar" class="nav-link px-3 py-2 text-neutral-600 hover:text-primary-color font-medium rounded-lg transition-colors duration-300 flex items-center gap-2">Kamar</a>
+                <a href="#fasilitas" class="nav-link px-3 py-2 text-neutral-600 hover:text-primary-color font-medium rounded-lg transition-colors duration-300 flex items-center gap-2">Fasilitas</a>
+                <a href="#lokasi" class="nav-link px-3 py-2 text-neutral-600 hover:text-primary-color font-medium rounded-lg transition-colors duration-300 flex items-center gap-2">Lokasi</a>
+                <a href="#faq" class="nav-link px-3 py-2 text-neutral-600 hover:text-primary-color font-medium rounded-lg transition-colors duration-300 flex items-center gap-2">FAQ</a>
 
-        <!-- Footer -->
-        <footer class="text-center mt-12 py-6 border-t">
-            <p class="text-gray-600">&copy; {% now "Y" %} Kost Alfarisi. Dibuat dengan Django.</p>
-        </footer>
-    </div>
+            </div>
+        </div>
+    </nav>
 
+    <!-- Hero Section -->
+    <header id="header" class="text-center pt-12 pb-16 md:pt-20 md:pb-24">
+        <div class="container mx-auto px-4 md:px-6 max-w-4xl">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">Hunian Eksklusif, Nyaman, dan Strategis</h1>
+            <p class="text-xl text-neutral-600 mb-10 max-w-2xl mx-auto">Temukan ketenangan dan kemudahan akses di Kost Alfarisi, tempat ideal untuk beristirahat dan beraktivitas.</p>
+        </div>
+    </header>
+    <main>
+        <!-- Keunggulan -->
+        <section id="keunggulan" class="py-20 bg-white">
+            <div class="container mx-auto px-4 md:px-6 max-w-7xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold relative inline-block px-4">Kenapa Memilih Kami?
+                        <span class="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-primary-color to-accent-color rounded-full"></span>
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="p-8 rounded-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+                        <i class="fas fa-map-marker-alt text-5xl mb-4 text-primary-color"></i>
+                        <h3 class="text-xl font-bold mb-2">Lokasi Strategis</h3>
+                        <p>Dekat dengan area perkantoran, kampus, dan pusat perbelanjaan. Akses mudah ke mana saja.</p>
+                    </div>
+                    <div class="p-8 rounded-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+                        <i class="fas fa-shield-alt text-5xl mb-4 text-primary-color"></i>
+                        <h3 class="text-xl font-bold mb-2">Keamanan Terjamin</h3>
+                        <p>Dilengkapi sistem keamanan CCTV 24 jam untuk memberikan rasa aman dan nyaman.</p>
+                    </div>
+                    <div class="p-8 rounded-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+                        <i class="fas fa-tag text-5xl mb-4 text-primary-color"></i>
+                        <h3 class="text-xl font-bold mb-2">Harga Terjangkau</h3>
+                        <p>Dapatkan fasilitas lengkap dengan harga sewa yang kompetitif dan terbaik di kelasnya.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Daftar Kamar -->
+        <section id="kamar" class="py-20">
+            <div class="container mx-auto px-4 md:px-6 max-w-7xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold relative inline-block px-4">Pilihan Kamar Kami
+                        <span class="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-primary-color to-accent-color rounded-full"></span>
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    {% for kamar in daftar_kamar %}
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+                        <div class="bg-neutral-200 h-52 flex items-center justify-center overflow-hidden">
+                            {% if kamar.foto_kamar %}
+                                <img src="{{ kamar.foto_kamar.url }}" alt="Foto Kamar {{ kamar.nomor_kamar }}" class="w-full h-full object-cover">
+                            {% else %}
+                                <div class="w-full h-full flex items-center justify-center bg-neutral-100">
+                                    <i class="fas fa-image text-5xl text-neutral-300"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-neutral-800">Kamar {{ kamar.nomor_kamar }}</h3>
+                                {% if kamar.status_ketersediaan == 'tersedia' %}
+                                    <span class="text-xs font-semibold px-3 py-1 bg-green-100 text-green-800 rounded-full">Tersedia</span>
+                                {% else %}
+                                    <span class="text-xs font-semibold px-3 py-1 bg-red-100 text-red-800 rounded-full">Terisi</span>
+                                {% endif %}
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4">{{ kamar.lantai }}</p>
+                            <p class="text-2xl font-bold text-neutral-800 my-2">Rp {{ kamar.harga_per_bulan|floatformat:"0" }}<span class="text-base font-normal text-neutral-600">/bln</span></p>
+                            <div class="mt-auto pt-4">
+                                <!-- PERUBAHAN LOGIKA DI SINI -->
+                                {% if kamar.status_ketersediaan == 'tersedia' %}
+                                    <a href="https://wa.me/6281234567890?text=Halo,%20saya%20tertarik%20untuk%20memesan%20kamar%20nomor%20{{ kamar.nomor_kamar }}" target="_blank" class="w-full flex items-center justify-center font-semibold py-2.5 px-4 rounded-lg transition-colors duration-300 bg-primary-color text-white hover:bg-primary-hover">
+                                        <i class="fab fa-whatsapp mr-2"></i>
+                                        <span>Pesan Sekarang</span>
+                                    </a>
+                                {% else %}
+                                    <a href="https://wa.me/6281234567890?text=Halo,%20saya%20tertarik%20dengan%20kamar%20nomor%20{{ kamar.nomor_kamar }}.%20Mohon%20info%20kapan%20akan%20tersedia." target="_blank" class="w-full flex items-center justify-center font-semibold py-2.5 px-4 rounded-lg transition-colors duration-300 bg-neutral-200 text-neutral-600 hover:bg-neutral-300">
+                                        <i class="fas fa-question-circle mr-2"></i>
+                                        <span>Tanya Ketersediaan</span>
+                                    </a>
+                                {% endif %}
+                                <!-- AKHIR PERUBAHAN LOGIKA -->
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="col-span-full text-center text-neutral-500">Belum ada data kamar yang ditambahkan.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <!-- Fasilitas -->
+        <section id="fasilitas" class="py-20 bg-white">
+            <div class="container mx-auto px-4 md:px-6 max-w-7xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold relative inline-block px-4">Fasilitas Pendukung
+                        <span class="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-primary-color to-accent-color rounded-full"></span>
+                    </h2>
+                </div>
+                <div class="max-w-4xl mx-auto p-8 md:p-12 rounded-2xl bg-neutral-50">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 text-center">
+                        <div class="flex flex-col items-center"><i class="fas fa-wifi text-4xl mb-3 text-primary-color"></i><p class="font-semibold">WiFi Cepat</p></div>
+                        <div class="flex flex-col items-center"><i class="fas fa-parking text-4xl mb-3 text-primary-color"></i><p class="font-semibold">Parkiran</p></div>
+                        <div class="flex flex-col items-center"><i class="fas fa-video text-4xl mb-3 text-primary-color"></i><p class="font-semibold">Keamanan CCTV</p></div>
+                        <div class="flex flex-col items-center"><i class="fas fa-faucet text-4xl mb-3 text-primary-color"></i><p class="font-semibold">Air Bersih</p></div>
+                        <div class="flex flex-col items-center"><i class="fas fa-bolt text-4xl mb-3 text-primary-color"></i><p class="font-semibold">Listrik Token</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Lokasi -->
+        <section id="lokasi" class="py-20">
+            <div class="container mx-auto px-4 md:px-6 max-w-7xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold relative inline-block px-4">Lokasi Strategis Kami
+                        <span class="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-primary-color to-accent-color rounded-full"></span>
+                    </h2>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-lg">
+                    <div class="w-full h-80 md:h-96 rounded-xl overflow-hidden">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.043599982496!2d98.65389631526685!3d3.577237951551065!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30312fe3f77b91c5%3A0x7058872545d56688!2sJl.%20Sei%20Padang%2C%20Medan%2C%20Kota%20Medan%2C%20Sumatera%20Utara!5e0!3m2!1sid!2sid!4v1655000000000!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <div class="p-6 text-center">
+                        <p class="text-lg font-semibold text-neutral-800">Kost Alfarisi</p>
+                        <p class="text-neutral-600">Jl. Sei Padang, Kota Medan, Sumatera Utara</p>
+                        <a href="https://maps.google.com/?q=Jalan+Sei+Padang+Medan" target="_blank" class="inline-block mt-4 bg-neutral-800 text-white font-semibold py-2.5 px-6 rounded-lg hover:bg-neutral-900 transition-colors"><i class="fas fa-map-marked-alt mr-2"></i>Buka di Google Maps</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="py-20 bg-white">
+            <div class="container mx-auto px-4 md:px-6 max-w-4xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold relative inline-block px-4">Pertanyaan Umum
+                        <span class="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-primary-color to-accent-color rounded-full"></span>
+                    </h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-neutral-50 p-6 rounded-xl">
+                        <h4 class="font-bold text-lg mb-2">Apakah harga sewa sudah termasuk listrik dan air?</h4>
+                        <p>Harga sewa sudah termasuk biaya air. Untuk listrik, setiap kamar menggunakan sistem token prabayar sehingga Anda bisa mengontrol pemakaian sendiri.</p>
+                    </div>
+                    <div class="bg-neutral-50 p-6 rounded-xl">
+                        <h4 class="font-bold text-lg mb-2">Bagaimana sistem pembayaran sewa bulanannya?</h4>
+                        <p>Pembayaran sewa dilakukan setiap bulan, paling lambat pada tanggal 5. Pembayaran dapat dilakukan melalui transfer bank atau secara tunai kepada pengelola.</p>
+                    </div>
+                    <div class="bg-neutral-50 p-6 rounded-xl">
+                        <h4 class="font-bold text-lg mb-2">Apakah ada jam malam?</h4>
+                        <p>Kami memberikan kebebasan kepada penghuni, namun tetap wajib menjaga ketertiban dan ketenangan lingkungan. Setiap penghuni akan memegang kunci gerbang sendiri.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center mt-20 py-10 border-t border-neutral-200">
+        <p class="text-neutral-600">&copy; {% now "Y" %} Kost Alfarisi. All rights reserved.</p>
+    </footer>
+
+    <!-- Script untuk Navigasi & Mobile Menu -->
+    <script>
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinksAll = document.querySelectorAll('nav a.nav-link');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        navLinksAll.forEach(link => {
+            link.addEventListener('click', () => {
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('nav .hidden a.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = 'header';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 120) { // adjusted offset for better accuracy
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
